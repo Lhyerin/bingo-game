@@ -8,19 +8,41 @@
 
 
 static int bingoBoard[N_SIZE][N_SIZE];
-static int numberStatus[N_SIZE*N_SIZE];
+int numberStatus[N_SIZE*N_SIZE];
 
-void bingo_init(void){
-	int i,j, cnt=1;
-	for(i=0;i<N_SIZE;i++)
-	   for (j=0;j<N_SIZE;j++)
-	   {
-	   	bingoBoard[i][j]=cnt;
-	   	numberStatus[cnt-1]=N_SIZE*i+j;
-	   	cnt++;
-	   }
+void bingo_init(void)
+{
+	int i, j, k;
+	int randNum; 
+	int maxNum = N_SIZE*N_SIZE; 
 	
+	for (i=0;i<N_SIZE*N_SIZE;i++)
+		numberStatus[i] = BINGO_NUMSTATUS_ABSENT;
+		
+	for (i=0;i<N_SIZE;i++)
+		for (j=0;j<N_SIZE;j++)
+		{
+			randNum = rand()%maxNum;   
+			
+			for (k=0;k<N_SIZE*N_SIZE;k++)  
+			{
+				if (numberStatus[k] == BINGO_NUMSTATUS_ABSENT ) 
+				{
+					if (randNum == 0) 
+						break;
+					else
+						randNum--; 
+				}
+			}
+			numberStatus[k] = i*N_SIZE + j;
+			bingoBoard[i][j] = k+1;
+			maxNum--;
+		}
 }
+	
+	
+	
+
 
 void bingo_printBoard(void){
 	int i,j;
